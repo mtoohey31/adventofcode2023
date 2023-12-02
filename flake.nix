@@ -16,7 +16,12 @@
 
         haskell = mkShell {
           name = "haskell";
-          packages = [ ghc haskell-language-server hlint ormolu ];
+          packages = [
+            (haskellPackages.ghcWithPackages (p: [ p.split ]))
+            haskell-language-server
+            hlint
+            ormolu
+          ];
         };
       };
     });
