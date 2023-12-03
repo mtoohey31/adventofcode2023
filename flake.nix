@@ -23,6 +23,11 @@
             ormolu
           ];
         };
+
+        koka = mkShell {
+          name = "koka";
+          packages = [ koka ];
+        };
       };
     });
 }
