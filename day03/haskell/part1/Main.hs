@@ -54,5 +54,4 @@ partNumbersSum schema = map (rowPartNumbersSum schema) [rowMin .. rowMax] & sum
   where
     ((rowMin, _), (rowMax, _)) = bounds schema
 
-main = do
-  readFile "../../input" <&> lines <&> toSchema <&> partNumbersSum >>= print
+main = readFile "../../input" <&> lines <&> toSchema <&> partNumbersSum >>= print

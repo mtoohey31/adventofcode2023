@@ -53,5 +53,4 @@ gearRatio schema (row, col) =
 
 gearRatiosSum schema = starIndices schema & map (gearRatio schema) & sum
 
-main = do
-  readFile "../../input" <&> lines <&> toSchema <&> gearRatiosSum >>= print
+main = readFile "../../input" <&> lines <&> toSchema <&> gearRatiosSum >>= print
