@@ -20,6 +20,7 @@ extrapolate (vs1 : vs2 : vss) = do
   let vs1Head = head vs1 - head vs2'
   (vs1Head : vs1) : vs2' : vss'
 extrapolate [vs] = assert (all (== 0) vs) [0 : vs]
+extrapolate [] = undefined
 
 nextValue original = head $ head $ extrapolate $ map reverse $ reverse $ diffs [original]
 

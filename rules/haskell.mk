@@ -1,9 +1,4 @@
-HASKELL_FLAGS := \
--Wall \
--Wno-incomplete-patterns \
--Wno-incomplete-uni-patterns \
--Wno-missing-signatures \
--Wno-name-shadowing
+HASKELL_FLAGS := -Wall -Werror -Wno-incomplete-uni-patterns -Wno-missing-signatures
 
 answer: main ../../input
 	./$< > $@

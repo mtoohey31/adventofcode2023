@@ -25,6 +25,7 @@ toCard c = case c of
   'Q' -> Q
   'K' -> K
   'A' -> A
+  _ -> undefined
 
 data Hand = Hand {cards :: [Card], bid :: Int} deriving (Eq)
 

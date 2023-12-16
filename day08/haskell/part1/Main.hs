@@ -13,6 +13,7 @@ data Instruction = Left | Right
 toInstruction c = case c of
   'L' -> Left
   'R' -> Right
+  _ -> undefined
 
 start = "AAA"
 
@@ -27,6 +28,7 @@ steps' n _ _ | n == end = 0 :: Int
 steps' n net (i : ir) = case (net ! n, i) of
   ((nn, _), Left) -> 1 + steps' nn net ir
   ((_, nn), Right) -> 1 + steps' nn net ir
+steps' _ _ _ = undefined
 
 steps input =
   let [instructions, nodes] = splitOn "\n\n" input

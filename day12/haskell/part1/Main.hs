@@ -13,6 +13,7 @@ data Cond = Operational | Damaged | Unknown
 toCond '.' = Operational
 toCond '#' = Damaged
 toCond '?' = Unknown
+toCond _ = undefined
 
 data Record = Record {springs :: [Cond], groups :: [Int]}
 
@@ -25,24 +26,24 @@ toRecord line = do
 arrangements Record {springs, groups} = arrangements' springs groups Nothing
   where
     -- Progress with no ongoing group when we can't start a new group:
-    arrangements' (Operational : springsRest) groups Nothing = arrangements' springsRest groups Nothing
+    arrangements' (Operational : sx) gs Nothing = arrangements' sx gs Nothing
     -- Progress with no remaining groups:
-    arrangements' (Unknown : springsRest) [] Nothing = arrangements' springsRest [] Nothing
+    arrangements' (Unknown : sx) [] Nothing = arrangements' sx [] Nothing
     -- Need to start group:
-    arrangements' (Damaged : springsRest) (group : groups) Nothing = arrangements' springsRest groups (Just (group - 1))
+    arrangements' (Damaged : sx) (g : gx) Nothing = arrangements' sx gx (Just (g - 1))
     -- Can choose whether to start next group:
-    arrangements' (Unknown : springsRest) (group : groups) Nothing = do
-      let start = arrangements' springsRest groups (Just (group - 1))
-      let noStart = arrangements' springsRest (group : groups) Nothing
+    arrangements' (Unknown : sx) (g : gx) Nothing = do
+      let start = arrangements' sx gx (Just (g - 1))
+      let noStart = arrangements' sx (g : gx) Nothing
       start + noStart
     -- Need to leave gap before next group:
-    arrangements' (spring : springsRest) groups (Just 0) = case spring of
-      Operational -> arrangements' springsRest groups Nothing
+    arrangements' (s : sx) gs (Just 0) = case s of
+      Operational -> arrangements' sx gs Nothing
       Damaged -> (0 :: Int) -- group we just applied wasn't long enough
-      Unknown -> arrangements' springsRest groups Nothing
+      Unknown -> arrangements' sx gs Nothing
     -- Need to continue current group:
-    arrangements' (Damaged : springsRest) groups (Just n) = arrangements' springsRest groups (Just (n - 1))
-    arrangements' (Unknown : springsRest) groups (Just n) = arrangements' springsRest groups (Just (n - 1))
+    arrangements' (Damaged : sx) gs (Just n) = arrangements' sx gs (Just (n - 1))
+    arrangements' (Unknown : sx) gs (Just n) = arrangements' sx gs (Just (n - 1))
     -- Can't continue current group:
     arrangements' (Operational : _) _ (Just _) = 0
     -- Can't start new group:

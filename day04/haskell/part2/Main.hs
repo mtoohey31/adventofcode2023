@@ -4,6 +4,7 @@ import Data.Function ((&))
 import Data.Functor ((<&>))
 import Data.List.Split (splitOn)
 import Data.Set (Set, fromList, member)
+import Prelude hiding (max)
 
 data Card = Card {winningNumbers :: Set Int, numbers :: [Int]} deriving (Eq, Ord)
 
@@ -18,16 +19,16 @@ score Card {winningNumbers, numbers} = filter (`member` winningNumbers) numbers 
 
 cardCountm (cards, n) = return $ startEvalMemo $ cardCountm' n
   where
-    cardCountm' n | n == max = return 1
+    cardCountm' n' | n' == max = return 1
       where
         (_, max) = bounds cards
-    cardCountm' n = do
+    cardCountm' n' = do
       won <- mapM (memo cardCountm') [start .. end] <&> sum
       return $ (1 :: Int) + won
       where
-        start = n + 1
+        start = n' + 1
         (_, max) = bounds cards
-        end = (start + score (cards ! n) - 1) `min` max
+        end = (start + score (cards ! n') - 1) `min` max
 
 main = do
   cards <- map toCard . lines <$> readFile "../../input"

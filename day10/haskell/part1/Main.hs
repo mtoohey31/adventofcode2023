@@ -45,6 +45,7 @@ findLoop sketch (yx : cx) =
   case (filter isNext currentNeighbours, currentTile) of
     (next : _, Start) -> findLoop sketch $ next : yx : cx
     ([next], _) -> findLoop sketch $ next : yx : cx
+    _ -> undefined
   where
     currentTile = sketch ! yx
     currentNeighbours = neighbours' currentTile yx
@@ -53,6 +54,7 @@ findLoop sketch (yx : cx) =
     ((minY, minX), (maxY, maxX)) = bounds sketch
     inBounds (y, x) = minY <= y && minX <= x && y <= maxY && x <= maxX
     isNext yx' = inBounds yx' && notPrev yx' && elem yx (neighbours' (sketch ! yx') yx')
+findLoop _ [] = undefined
 
 farthestPoint sketch = (length (findLoop sketch [startYx]) - 1) `div` 2
   where

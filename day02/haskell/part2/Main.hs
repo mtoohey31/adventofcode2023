@@ -18,6 +18,7 @@ toCounts = toCounts' . splitOn ", "
                     "red" -> Counts count green blue
                     "green" -> Counts red count blue
                     "blue" -> Counts red green count
+                    _ -> undefined
     toCounts' [] = Counts 0 0 0
 
 toMaxCounts s =

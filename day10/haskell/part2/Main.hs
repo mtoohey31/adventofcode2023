@@ -47,6 +47,7 @@ findLoop sketch (yx : cx) =
   case (filter isNext currentNeighbours, currentTile) of
     (next : _, Start) -> findLoop sketch $ next : yx : cx
     ([next], _) -> findLoop sketch $ next : yx : cx
+    _ -> undefined
   where
     currentTile = sketch ! yx
     currentNeighbours = neighbours' currentTile yx
@@ -55,6 +56,7 @@ findLoop sketch (yx : cx) =
     ((minY, minX), (maxY, maxX)) = bounds sketch
     inBounds (y, x) = minY <= y && minX <= x && y <= maxY && x <= maxX
     isNext yx' = inBounds yx' && notPrev yx' && elem yx (neighbours' (sketch ! yx') yx')
+findLoop _ [] = undefined
 
 data Tile' = Ground' | Pipe' Direction deriving (Eq)
 
@@ -96,11 +98,14 @@ enclosedGround sketch = assocs reduced & map snd & chunksOf width & map (enclose
       case c of
         NW -> enclosedGround' s rest'
         SW -> enclosedGround' (swap s) rest'
+        _ -> undefined
     enclosedGround' s (Pipe' SE : rest) = do
       let (Pipe' c : rest') = dropWhile (== Pipe' H) rest
       case c of
         NW -> enclosedGround' (swap s) rest'
         SW -> enclosedGround' s rest'
+        _ -> undefined
     enclosedGround' Out [] = 0
+    enclosedGround' _ _ = undefined
 
 main = readFile "../../input" <&> toSketch <&> enclosedGround >>= print

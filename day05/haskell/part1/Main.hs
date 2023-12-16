@@ -35,5 +35,6 @@ lowestLocation (seeds : sections) =
   let seeds' = toSeed seeds
    in let sections' = map toSection sections
        in map (flip (foldl (flip applySection)) sections') seeds' & minimum
+lowestLocation [] = undefined
 
 main = readFile "../../input" <&> strip <&> splitOn "\n\n" <&> lowestLocation >>= print

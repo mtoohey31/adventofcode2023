@@ -15,6 +15,7 @@ data Cond = Operational | Damaged | Unknown deriving (Eq, Ord)
 toCond '.' = Operational
 toCond '#' = Damaged
 toCond '?' = Unknown
+toCond _ = undefined
 
 data Record = Record {springs :: [Cond], groups :: [Int]}
 
@@ -27,24 +28,24 @@ toRecord line = do
 arrangements Record {springs, groups} = startEvalMemo (arrangements' (springs, groups, Nothing))
   where
     -- Progress with no ongoing group when we can't start a new group:
-    arrangements' (Operational : springsRest, groups, Nothing) = arrangements' (springsRest, groups, Nothing)
-    -- Progress with no remaining groups:
-    arrangements' (Unknown : springsRest, [], Nothing) = arrangements' (springsRest, [], Nothing)
+    arrangements' (Operational : sx, gs, Nothing) = arrangements' (sx, gs, Nothing)
+    -- Progress with no remaining gs:
+    arrangements' (Unknown : sx, [], Nothing) = arrangements' (sx, [], Nothing)
     -- Need to start group:
-    arrangements' (Damaged : springsRest, group : groups, Nothing) = arrangements' (springsRest, groups, Just (group - 1))
+    arrangements' (Damaged : sx, g : gx, Nothing) = arrangements' (sx, gx, Just (g - 1))
     -- Can choose whether to start next group:
-    arrangements' (Unknown : springsRest, group : groups, Nothing) = do
-      start <- memo arrangements' (springsRest, groups, Just (group - 1))
-      noStart <- memo arrangements' (springsRest, group : groups, Nothing)
+    arrangements' (Unknown : sx, g : gx, Nothing) = do
+      start <- memo arrangements' (sx, gx, Just (g - 1))
+      noStart <- memo arrangements' (sx, g : gx, Nothing)
       return $ start + noStart
     -- Need to leave gap before next group:
-    arrangements' (spring : springsRest, groups, Just 0) = case spring of
-      Operational -> arrangements' (springsRest, groups, Nothing)
+    arrangements' (spring : sx, gs, Just 0) = case spring of
+      Operational -> arrangements' (sx, gs, Nothing)
       Damaged -> return (0 :: Int) -- group we just applied wasn't long enough
-      Unknown -> arrangements' (springsRest, groups, Nothing)
+      Unknown -> arrangements' (sx, gs, Nothing)
     -- Need to continue current group:
-    arrangements' (Damaged : springsRest, groups, Just n) = arrangements' (springsRest, groups, Just (n - 1))
-    arrangements' (Unknown : springsRest, groups, Just n) = arrangements' (springsRest, groups, Just (n - 1))
+    arrangements' (Damaged : sx, gs, Just n) = arrangements' (sx, gs, Just (n - 1))
+    arrangements' (Unknown : sx, gs, Just n) = arrangements' (sx, gs, Just (n - 1))
     -- Can't continue current group:
     arrangements' (Operational : _, _, Just _) = return 0
     -- Can't start new group:
@@ -52,7 +53,7 @@ arrangements Record {springs, groups} = startEvalMemo (arrangements' (springs, g
     -- Finished at the end:
     arrangements' ([], [], Just 0) = return 1
     arrangements' ([], [], Nothing) = return 1
-    -- Groups left at the end:
+    -- gs left at the end:
     arrangements' ([], _ : _, _) = return 0
     arrangements' ([], [], Just _) = return 0
 

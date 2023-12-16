@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
+
 {-# LANGUAGE OverloadedStrings #-}
 
 import Data.Char (isDigit, ord)

@@ -11,6 +11,7 @@ toImage input = lines input & map (map isGalaxy)
   where
     isGalaxy '#' = True
     isGalaxy '.' = False
+    isGalaxy _ = undefined
 
 expand image = expandVert image & transpose & expandVert & transpose
   where

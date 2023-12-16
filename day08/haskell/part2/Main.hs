@@ -6,13 +6,14 @@ import Data.Function ((&))
 import Data.Functor ((<&>))
 import Data.List.Split (splitOn)
 import Data.Map (fromList, (!))
-import Prelude hiding (Left, Right, repeat)
+import Prelude hiding (Left, Right, gcd, repeat)
 
 data Instruction = Left | Right
 
 toInstruction c = case c of
   'L' -> Left
   'R' -> Right
+  _ -> undefined
 
 startPrefix = 'A'
 
@@ -26,6 +27,7 @@ toNode s = do
 step n net (i : ir) = case (net ! n, i) of
   ((n', _), Left) -> (n', ir)
   ((_, n'), Right) -> (n', ir)
+step _ _ _ = undefined
 
 data Pattern = Pattern {phase :: Int, period :: Int}
 

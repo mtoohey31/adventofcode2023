@@ -62,5 +62,6 @@ lowestLocation (seeds : sections) =
             sections'
             & map start
             & minimum
+lowestLocation [] = undefined
 
 main = readFile "../../input" <&> strip <&> splitOn "\n\n" <&> lowestLocation >>= print

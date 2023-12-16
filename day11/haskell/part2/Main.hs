@@ -15,6 +15,7 @@ toImage input = lines input & map (map isGalaxy)
   where
     isGalaxy '#' = True
     isGalaxy '.' = False
+    isGalaxy _ = undefined
 
 expand' image = [(emptyRowsBefore ! y * expansionFactor + y, emptyColsBefore ! x * expansionFactor + x) | (y, x) <- galaxies]
   where
