@@ -17,7 +17,11 @@
         haskell = mkShell {
           name = "haskell";
           packages = [
-            (haskellPackages.ghcWithPackages (p: [ p.monad-memo p.split ]))
+            (haskellPackages.ghcWithPackages (p: [
+              p.monad-memo
+              p.ordered-containers
+              p.split
+            ]))
             haskell-language-server
             hlint
             ormolu
