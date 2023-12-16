@@ -20,7 +20,9 @@
             (haskellPackages.ghcWithPackages (p: [
               p.monad-memo
               p.ordered-containers
+              p.relude
               p.split
+              p.unordered-containers
             ]))
             haskell-language-server
             hlint
