@@ -9,7 +9,7 @@ main: Main.hs
 .PHONY: lint
 lint:
 	hlint -q Main.hs
-	ormolu -m check Main.hs
+	ormolu -o -XImportQualifiedPost -m check Main.hs
 
 .PHONY: clean
 clean:

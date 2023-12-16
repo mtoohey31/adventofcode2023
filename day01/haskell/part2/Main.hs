@@ -1,6 +1,5 @@
-{-# OPTIONS_GHC -Wno-name-shadowing #-}
-
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
 
 import Data.Char (isDigit, ord)
 import Data.List (findIndex)
